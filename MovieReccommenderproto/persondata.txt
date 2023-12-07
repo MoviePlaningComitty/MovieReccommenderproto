@@ -1,4 +1,4 @@
-1;10.00;Baby Driver;
-1;9.60;Crime;2;8.00;Adventure;3;9.60;Action;4;10.00;Drama;5;10.00;Music;6;10.00;ActionCrime;7;10.00;ActionDrama;8;10.00;ActionMusic;9;10.00;CrimeDrama;10;10.00;CrimeMusic;11;10.00;DramaMusic;12;10.00;ActionCrimeDramaMusic;
-1;10.00;Ansel Elgort;
-1;10.00;Edgar Wright;
+
+1;8.00;Crime;2;8.00;Adventure;3;8.00;Action;
+
+

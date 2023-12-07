@@ -516,8 +516,7 @@ void delete_all(userStats* statistics)
         if (strcmp(answer, "yes") == 0) {
             remove("persondata.txt");
             printf("File deleted successfully\n");
-            free(statistics);
-            statistics = (userStats*)malloc(sizeof(userStats));
+            memset(statistics, 0, sizeof(userStats));
         }
         else if (strcmp(answer, "no") == 0) {
             printf("OK\n");
