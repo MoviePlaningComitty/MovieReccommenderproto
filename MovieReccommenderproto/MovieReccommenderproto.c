@@ -388,7 +388,7 @@ void ask_user(Movies* movieArray, userStats* stats) {
                 if (s == 'y') 
                 {
                     int id;
-
+                    printf("What do you want you want to review (id): ");
                     scanf(" %i", &id);
                     rateMovie(id, stats, movieArray);
                 }
