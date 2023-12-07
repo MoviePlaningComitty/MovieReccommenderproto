@@ -162,13 +162,13 @@ void getMovie(Movies* movieArray, int id)
 
 void printCommandLines(void)
 {
-    printf("\nWrite \"Exit\" or \"0\" to exit the program\n");
-    printf("Write \"Commands\" or \"1\" for the list of commands\n");
-    printf("Write \"RateMovieId\" or \"2\" followed by the Id for the movie you want to review\n");
-    printf("Write \"RandomMovie\"  or \"3\" This will give you 10 random movies\n");
-    printf("Write \"DeleteMyInfo\"  or \"4\" Delets all information we have on you\n");
-    printf("Write \"GetMovie\"  or \"5\" Followed by the movie Id to get all info on mthe movie\n");
-    printf("Write \"RecommendMovie\"  or \"6\" Followed by the movie Id to get all info on mthe movie\n");
+    printf("\nWrite \"Exit\" or \"0\" to exit the program\n\n");
+    printf("Write \"Commands\" or \"1\" for the list of commands\n\n");
+    printf("Write \"RateMovieId\" or \"2\" followed by the Id for the movie you want to review\n\n");
+    printf("Write \"RandomMovie\"  or \"3\" to get 10 random movies\n\n");
+    printf("Write \"DeleteMyInfo\"  or \"4\"  to remove personal data\n\n");
+    printf("Write \"GetMovie\"  or \"5\" Followed by the movie Id to get all info on the movie\n\n");
+    printf("Write \"RecommendMovie\"  or \"6\" Give me 10 movie recommendations!\n");
 }
 
 int runCommand(char* command, Movies* movieArray, userStats* stats)
@@ -226,7 +226,6 @@ int checkForCommand(Movies* movieArray, userStats* stats)
 
 void fraFilTilMovie(Movies* movieArray)
 {
-    printf("Loading movies...\n");
     FILE* f = fopen("movie1.txt", "r");
     if (f == NULL)
     {
@@ -243,7 +242,6 @@ void fraFilTilMovie(Movies* movieArray)
         movieArray[i].id = i +1;
     }
     fclose(f);
-    printf("Loadig complete.\n");
 }
 
 Movies scanFunktion(FILE* f) //denne funktion gemmer enkelte film
