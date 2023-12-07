@@ -899,11 +899,7 @@ void rateMovie(int movieID, userStats* stats, Movies* movieArray) {
     } while (userRating < 1 || userRating > 10);
     
     movieRatedAlgorithm(stats[0].statsMovies, movieArray[i], userRating);
-    printf("1");
     genreRatedAlgorithm(stats[0].statsGenre, movieArray[i], userRating);
-    printf("2");
     actorRatedAlgorithm(stats[0].statsActor, movieArray[i], userRating);
-    printf("3");
     directorRatedAlgorithm(stats[0].statsDirector, movieArray[i], userRating);
-    printf("4");
 }
