@@ -385,6 +385,15 @@ void ask_user(Movies* movieArray, userStats* stats) {
 
                 scanf(" %c", &s);
 
+                if (s == 'y') 
+                {
+                    int id;
+
+                    scanf(" %i", &id);
+                    rateMovie(id, stats, movieArray);
+                }
+                    
+
             } while (s != 'Y');
             
 
