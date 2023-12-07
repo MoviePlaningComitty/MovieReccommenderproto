@@ -385,7 +385,7 @@ void ask_user(Movies* movieArray, userStats* stats) {
 
                 scanf(" %c", &s);
 
-                if (s == 'y') 
+                if (s == 'Y') 
                 {
                     int id;
                     printf("What do you want you want to review (id): ");
@@ -741,13 +741,12 @@ int comparator(const void* p1, const void* p2)
 
 void movieRatedAlgorithm(movieStats movieArray[], Movies theMovie, int movieRating)
 {
-    int pladsPaaArray = 0, compare = 0;
+    int pladsPaaArray = 0, compare = 1;
     double weight;
-    while (movieArray[pladsPaaArray].movieName != (NULL))//måske ændrer NULL
+    while (movieArray[pladsPaaArray].movieId != 0)//måske ændrer NULL
     {
         pladsPaaArray++; //denne whileløkke finder den næste tomme plads på array'et
     }
-
     for (int r = pladsPaaArray; r >= 0; r--)
     {
         compare = strcmp(theMovie.nameOfFilm, movieArray[r].movieName);
@@ -757,7 +756,6 @@ void movieRatedAlgorithm(movieStats movieArray[], Movies theMovie, int movieRati
             break;
         }
     }
-
     if (compare != 0) //hvis ikke den kan finde noget om filmen i array, tilføj disse værdier
     {
         strcpy(movieArray[pladsPaaArray].movieName, theMovie.nameOfFilm);
@@ -770,7 +768,7 @@ void genreRatedAlgorithm(genreStats genreArray[], Movies theMovie, int movieRati
 {
     int pladsPaaArray = 0, compare = 0;
     double weight;
-    while (genreArray[pladsPaaArray].genreName != (NULL))//måske ændrer NULL
+    while (genreArray[pladsPaaArray].genreId != 0)//måske ændrer NULL
     {
         pladsPaaArray++; //denne whileløkke finder den næste tomme plads på array'et
     }
@@ -813,7 +811,7 @@ void actorRatedAlgorithm(actorStats actorArray[], Movies theMovie, int movieRati
 {
     int pladsPaaArray = 0, compare = 0;
     double weight;
-    while (actorArray[pladsPaaArray].actorName != (NULL))//måske ændrer NULL
+    while (actorArray[pladsPaaArray].actorId != 0)//måske ændrer NULL
     {
         pladsPaaArray++; //denne whileløkke finder den næste tomme plads på array'et
     }
@@ -849,7 +847,7 @@ void directorRatedAlgorithm(directorStats directorArray[], Movies theMovie, int 
 {
     int pladsPaaArray = 0, compare = 0;
     double weight;
-    while (directorArray[pladsPaaArray].directorName != (NULL))//måske ændrer NULL
+    while (directorArray[pladsPaaArray].directorId != 0)//måske ændrer NULL
     {
         pladsPaaArray++; //denne whileløkke finder den næste tomme plads på array'et
     }
@@ -897,10 +895,15 @@ void rateMovie(int movieID, userStats* stats, Movies* movieArray) {
         if (userRating < 1 || userRating > 10) {
             printf("INVALID INPUT");
         }
-    } while (userRating < 1 || userRating > 10);
 
-    movieRatedAlgorithm(stats->statsMovies, movieArray[i], userRating);
-    genreRatedAlgorithm(stats->statsGenre, movieArray[i], userRating);
-    actorRatedAlgorithm(stats->statsActor, movieArray[i], userRating);
-    directorRatedAlgorithm(stats->statsDirector, movieArray[i], userRating);
+    } while (userRating < 1 || userRating > 10);
+    
+    movieRatedAlgorithm(stats[0].statsMovies, movieArray[i], userRating);
+    printf("1");
+    genreRatedAlgorithm(stats[0].statsGenre, movieArray[i], userRating);
+    printf("2");
+    actorRatedAlgorithm(stats[0].statsActor, movieArray[i], userRating);
+    printf("3");
+    directorRatedAlgorithm(stats[0].statsDirector, movieArray[i], userRating);
+    printf("4");
 }
