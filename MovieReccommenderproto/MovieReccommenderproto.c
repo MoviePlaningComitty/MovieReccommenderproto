@@ -768,12 +768,14 @@ void genreRatedAlgorithm(genreStats genreArray[], Movies theMovie, int movieRati
 {
     int pladsPaaArray = 0, compare = 0;
     double weight;
-    while (genreArray[pladsPaaArray].genreId != 0)//måske ændrer NULL
-    {
-        pladsPaaArray++; //denne whileløkke finder den næste tomme plads på array'et
-    }
+    
     for (int i = 0; i < GENRE_MAX_AMOUNT; i++)
     {
+        while (genreArray[pladsPaaArray].genreId != 0)//måske ændrer NULL
+        {
+            pladsPaaArray++; //denne whileløkke finder den næste tomme plads på array'et
+        }
+
         if (theMovie.genre[i][0] == '\n') {
             continue;
         }
