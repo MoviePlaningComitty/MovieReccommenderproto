@@ -902,4 +902,5 @@ void rateMovie(int movieID, userStats* stats, Movies* movieArray) {
     genreRatedAlgorithm(stats[0].statsGenre, movieArray[i], userRating);
     actorRatedAlgorithm(stats[0].statsActor, movieArray[i], userRating);
     directorRatedAlgorithm(stats[0].statsDirector, movieArray[i], userRating);
+    savefiles(stats);
 }
