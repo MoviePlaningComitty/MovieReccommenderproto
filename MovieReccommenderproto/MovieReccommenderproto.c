@@ -89,10 +89,9 @@ void read_stats(userStats* statistics);
 
 double ScoreGetActor(Movies movieArray, userStats* stats);
 
-
 int recommendRandom(Movies movieArray[]);
 
-void delete_all(void);
+void delete_all(userStats* statistics);
 
 void concatenateStrings(char strings[][WORD_LENGTH], int size);
 
@@ -198,7 +197,7 @@ int runCommand(char* command, Movies* movieArray, userStats* stats)
     }
     else if(strcmp(command, "DeleteMyInfo") == 0 || strcmp(command, "deletemyinfo") == 0 || strcmp(command, "4") == 0)
     {
-        delete_all();
+        delete_all(stats);
         cold_start(movieArray, stats);
     }
     else if (strcmp(command, "GetMovie") == 0 || strcmp(command, "getmovie") == 0 || strcmp(command, "5") == 0)
