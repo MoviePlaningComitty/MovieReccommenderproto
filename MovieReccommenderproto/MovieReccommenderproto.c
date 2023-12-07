@@ -122,6 +122,10 @@ void actorRatedAlgorithm(actorStats actorArray[], Movies theMovie, int movieRati
 
 void directorRatedAlgorithm(directorStats directorArray[], Movies theMovie, int movieRating);
 
+int printOtherStats(userStats* stats);
+
+int printMovieHistory(userStats* stats);
+
 int main(void)
 {
     srand(time(NULL));
@@ -168,7 +172,8 @@ void printCommandLines(void)
     printf("Write \"RandomMovie\"  or \"3\" This will give you 10 random movies\n");
     printf("Write \"DeleteMyInfo\"  or \"4\" Delets all information we have on you\n");
     printf("Write \"GetMovie\"  or \"5\" Followed by the movie Id to get all info on mthe movie\n");
-    printf("Write \"RecommendMovie\"  or \"6\" Followed by the movie Id to get all info on mthe movie\n");
+    printf("Write \"RecommendMovie\"  or \"6\" for movies we reccomend\n");
+    printf("Write \"PrintMovieHistory\"  or \"7\" Prints the movies you have watched with your review\n");
 }
 
 int runCommand(char* command, Movies* movieArray, userStats* stats)
@@ -205,6 +210,14 @@ int runCommand(char* command, Movies* movieArray, userStats* stats)
     else if (strcmp(command, "RecommendMovie") == 0 || strcmp(command, "recommendmovie") == 0 || strcmp(command, "6") == 0)
     {
         RecommendMovie(movieArray,stats);
+    }
+    else if (strcmp(command, "PrintMovieHistory") == 0 || strcmp(command, "printmoviehistory") == 0 || strcmp(command, "7") == 0)
+    {
+        printMovieHistory(stats);
+    }
+    else if (strcmp(command, "PrintOtherStats") == 0 || strcmp(command, "printotherstats") == 0 || strcmp(command, "8") == 0)
+    {
+        printOtherStats(stats);
     }
     else
     {
@@ -493,7 +506,7 @@ int recommendRandom(Movies movieArray[]) {
     return 0;
 }
 
-void delete_all(void) 
+void delete_all(userStats* statistics)
 { //prompter brugeren til at slette ens persondata
     char answer[4];
 
@@ -504,6 +517,8 @@ void delete_all(void)
         if (strcmp(answer, "yes") == 0) {
             remove("persondata.txt");
             printf("File deleted successfully\n");
+            free(statistics);
+            statistics = (userStats*)malloc(sizeof(userStats));
         }
         else if (strcmp(answer, "no") == 0) {
             printf("OK\n");
@@ -905,4 +920,44 @@ void rateMovie(int movieID, userStats* stats, Movies* movieArray) {
     actorRatedAlgorithm(stats[0].statsActor, movieArray[i], userRating);
     directorRatedAlgorithm(stats[0].statsDirector, movieArray[i], userRating);
     savefiles(stats);
+}
+
+int printMovieHistory(userStats *stats) {
+    //Tjekker hvor mange film der er i historikken 
+    for (int i = 0; i < MAENGDE; i++) {
+        // print struct variables
+        if (stats[0].statsMovies[i].movieId == 0)
+            continue;
+        printf("Movies: %s. review: %.0lf\n", stats[0].statsMovies[i].movieName, stats[0].statsMovies[i].movieScore);
+    }
+    return 0;
+}
+
+int printOtherStats(userStats* stats) {
+    
+
+    for (int i = 0; i < MAENGDE; i++) {
+        // print struct variables
+        if (stats[0].statsGenre[i].genreId == 0)
+            continue;
+        printf("\nGenres: ");
+        printf("%s", stats[0].statsGenre[i].genreName);
+    }
+
+    for (int i = 0; i < MAENGDE; i++) {
+        if (stats[0].statsActor[i].actorId == 0)
+            continue;
+        // print struct variables
+        printf("\nActors: ");
+        printf("%s", stats[0].statsActor[i].actorName);
+    }
+
+    for (int i = 0; i < MAENGDE; i++) {
+        if (stats[0].statsDirector[i].directorId == 0)
+            continue;
+        // print struct variables
+        printf("\nDirectors: ");
+        printf("%s", stats[0].statsDirector[i].directorName);
+    }
+    return 0;
 }
