@@ -169,12 +169,12 @@ void printCommandLines(void)
     printf("\nWrite \"Exit\" or \"0\" to exit the program\n");
     printf("Write \"Commands\" or \"1\" for the list of commands\n");
     printf("Write \"RateMovieId\" or \"2\" followed by the Id for the movie you want to review\n");
-    printf("Write \"RandomMovie\"  or \"3\" This will give you 10 random movies\n");
-    printf("Write \"DeleteMyInfo\"  or \"4\" Delets all information we have on you\n");
-    printf("Write \"GetMovie\"  or \"5\" Followed by the movie Id to get all info on mthe movie\n");
-    printf("Write \"RecommendMovie\"  or \"6\" for movies we reccomend\n");
+    printf("Write \"RandomMovie\"  or \"3\" to get 10 random movies\n");
+    printf("Write \"DeleteMyInfo\"  or \"4\" to delete all ratings and start over\n");
+    printf("Write \"GetMovie\"  or \"5\" To find all the info about the Movie\n");
+    printf("Write \"RecommendMovie\"  or \"6\" to get movies recommended to you\n");
     printf("Write \"PrintMovieHistory\"  or \"7\" Prints the movies you have watched with your review\n");
-
+    printf("Write \"PrintOtherStats\" or \"8\" to see what info the recommender has generated\n");
 }
 
 int runCommand(char* command, Movies* movieArray, userStats* stats)
@@ -190,6 +190,7 @@ int runCommand(char* command, Movies* movieArray, userStats* stats)
     else if (strcmp(command, "RateMovieId") == 0 || strcmp(command, "ratemovieid") == 0 || strcmp(command, "2") == 0)
     {
         int i;
+        printf("Which movie would you like to review (id): ");
         scanf(" %i", &i);
         rateMovie(i, stats, movieArray);
     }
@@ -222,7 +223,7 @@ int runCommand(char* command, Movies* movieArray, userStats* stats)
     }
     else
     {
-        printf("Type \"Commands\" for the list of commands\n");
+        printf("Type \"Commands\" or \"1\" for the list of commands\n");
     }
 
     return 1;
@@ -326,9 +327,9 @@ void printFunktion(Movies ThisMovie) //printer alle filmene hvis man skal bruge 
     char* company = ThisMovie.company;
     int runtime = ThisMovie.runtime;
 
-    printf("Movie Id: %i;", ThisMovie.id);
-    printf("Name: %s;", nameOfFilm);
-    printf("Rated: %s; ", rating);
+    printf("Movie Id: %i\n", ThisMovie.id);
+    printf("Name: %s\n", nameOfFilm);
+    printf("Rated: %s\n ", rating);
     printf("Genre: (");
     printf("%s", ThisMovie.genre[0]);
     for (int i = 1; i < GENRE_MAX_AMOUNT; i++)
@@ -337,19 +338,19 @@ void printFunktion(Movies ThisMovie) //printer alle filmene hvis man skal bruge 
             break;
         printf(", %s", ThisMovie.genre[i]);
     }
-    printf("); ");
-    printf("Release year: %d; ", year);
-    printf("Release date: %s; ", release);
-    printf("Rating: %.1lf; ", score);
-    printf("Votes: %d; ", IMDB);
-    printf("Director: %s; ", director);
-    printf("Writer: %s; ", writer);
-    printf("Star actor: %s; ", actor);
-    printf("Country: %s; ", country);
-    printf("Budget: %d; ", budget);
-    printf("Gross earnings: %d; ", gross);
-    printf("Production Company: %s; ", company);
-    printf("Runtime: %d;\n", runtime);
+    printf(")\n ");
+    printf("Release year: %d\n", year);
+    printf("Release date: %s\n", release);
+    printf("Rating: %.1lf\n", score);
+    printf("Votes: %d\n", IMDB);
+    printf("Director: %s\n", director);
+    printf("Writer: %s\n", writer);
+    printf("Star actor: %s\n", actor);
+    printf("Country: %s\n", country);
+    printf("Budget: %d\n", budget);
+    printf("Gross earnings: %d\n", gross);
+    printf("Production Company: %s\n", company);
+    printf("Runtime: %d\n", runtime);
 }
 
 void printMovieName(Movies ThisMovie)
@@ -400,7 +401,7 @@ void ask_user(Movies* movieArray, userStats* stats) {
                 if (s == 'Y') 
                 {
                     int id;
-                    printf("What do you want you want to review (id): ");
+                    printf("Which movie would you like to review (id): ");
                     scanf(" %i", &id);
                     rateMovie(id, stats, movieArray);
                 }
@@ -510,7 +511,7 @@ void delete_all(userStats* statistics)
     char answer[4];
 
     do {
-        printf("Do you want to delete this file (yes or no)?\n");
+        printf("Do you want to delete your data so far (yes or no)?\n");
         scanf(" %s", answer);
 
         if (strcmp(answer, "yes") == 0) {
@@ -708,7 +709,7 @@ void RecommendMovie(Movies* movieArray, userStats* stats)
     qsort(movieArray, MAENGDE, sizeof(Movies), comparator);
 
     // give us 3 movies within top 200 
-    printf("\nIt's likely that you will like these movies\n");
+    printf("\nTop recommended Movies to you\n");
     for (int i = 0; i < 3; i++)
     {
         int y = rand() % 200;
@@ -717,7 +718,7 @@ void RecommendMovie(Movies* movieArray, userStats* stats)
     }
 
     // gives us 3 movies between 201-1000
-    printf("\ntheir is a high probability that you will like these movies\n");
+    printf("\nMovies you are likely to watch\n");
     for (int i = 0; i < 3; i++)
     {
         int y = rand() % 800 + 201;
@@ -726,7 +727,7 @@ void RecommendMovie(Movies* movieArray, userStats* stats)
     }
 
     //gives us 2 movies between 1001-2000
-    printf("\ntheir is a probability that you will like these movies\n");
+    printf("\nMovies you might not watch normally\n");
     for (int i = 0; i < 2; i++)
     {
         int y = rand() % 1000 + 1001;
@@ -736,7 +737,7 @@ void RecommendMovie(Movies* movieArray, userStats* stats)
 
 
     //gives us 2 movies between 1001-6000
-    printf("\nYou may like these movies\n");
+    printf("\nMovies you don't normally watch\n");
     for (int i = 0; i < 2; i++)
     {
         int y = rand() % 5000 + 1001;
@@ -932,30 +933,30 @@ int printMovieHistory(userStats *stats) {
 }
 
 int printOtherStats(userStats* stats) {
-    
+    printf("\n");
 
     for (int i = 0; i < MAENGDE; i++) {
         // print struct variables
         if (stats[0].statsGenre[i].genreId == 0)
             continue;
-        printf("\nGenres: ");
-        printf("%s", stats[0].statsGenre[i].genreName);
+        printf("Genres: ");
+        printf("%s\n", stats[0].statsGenre[i].genreName);
     }
 
     for (int i = 0; i < MAENGDE; i++) {
         if (stats[0].statsActor[i].actorId == 0)
             continue;
         // print struct variables
-        printf("\nActors: ");
-        printf("%s", stats[0].statsActor[i].actorName);
+        printf("Actors: ");
+        printf("%s\n", stats[0].statsActor[i].actorName);
     }
 
     for (int i = 0; i < MAENGDE; i++) {
         if (stats[0].statsDirector[i].directorId == 0)
             continue;
         // print struct variables
-        printf("\nDirectors: ");
-        printf("%s", stats[0].statsDirector[i].directorName);
+        printf("Directors: ");
+        printf("%s\n", stats[0].statsDirector[i].directorName);
     }
     return 0;
 }
