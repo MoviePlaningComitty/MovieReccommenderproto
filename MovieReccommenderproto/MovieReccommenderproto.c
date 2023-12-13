@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <ctype.h>
 
 #define MAENGDE 7662
 #define WORD_LENGTH 200
@@ -168,56 +169,57 @@ void printCommandLines(void)
 
     printf("\nWrite \"Exit\" or \"0\" to exit the program\n");
     printf("Write \"Commands\" or \"1\" for the list of commands\n");
-    printf("Write \"RateMovieId\" or \"2\" followed by the Id for the movie you want to review\n");
+    printf("Write \"RateMovieId\" or \"2\" to review a movie\n");
     printf("Write \"RandomMovie\"  or \"3\" to get 10 random movies\n");
-    printf("Write \"DeleteMyInfo\"  or \"4\" to delete all ratings and start over\n");
-    printf("Write \"GetMovie\"  or \"5\" To find all the info about the Movie\n");
+    printf("Write \"DeleteMyInfo\"  or \"4\" to delete your data and start over\n");
+    printf("Write \"GetMovie\"  or \"5\" To get info about a Movie\n");
     printf("Write \"RecommendMovie\"  or \"6\" to get movies recommended to you\n");
-    printf("Write \"PrintMovieHistory\"  or \"7\" Prints the movies you have watched with your review\n");
+    printf("Write \"PrintMovieHistory\"  or \"7\" Prints the movies you have watched, with your review\n");
     printf("Write \"PrintOtherStats\" or \"8\" to see what info the recommender has generated\n");
 }
 
 int runCommand(char* command, Movies* movieArray, userStats* stats)
 {
-    if (strcmp(command, "Exit") == 0 || strcmp(command, "exit") == 0 || strcmp(command, "0") == 0)
+    command[0] = tolower(command[0]);
+    if (strcmp(command, "exit") == 0 || strcmp(command, "0") == 0)
     {
         return 0;
     }
-    else if (strcmp(command, "Commands") == 0 || strcmp(command, "commands") == 0 || strcmp(command, "1") == 0)
+    else if (strcmp(command, "commands") == 0 || strcmp(command, "1") == 0)
     {
         printCommandLines();
     }
-    else if (strcmp(command, "RateMovieId") == 0 || strcmp(command, "ratemovieid") == 0 || strcmp(command, "2") == 0)
+    else if (strcmp(command, "ratemovieid") == 0 || strcmp(command, "2") == 0)
     {
         int i;
         printf("Which movie would you like to review (id): ");
         scanf(" %i", &i);
         rateMovie(i, stats, movieArray);
     }
-    else if (strcmp(command, "RandomMovie") == 0 || strcmp(command, "randommovie") == 0 || strcmp(command, "3") == 0)
+    else if (strcmp(command, "randommovie") == 0 || strcmp(command, "3") == 0)
     {
         recommendRandom(movieArray);
     }
-    else if(strcmp(command, "DeleteMyInfo") == 0 || strcmp(command, "deletemyinfo") == 0 || strcmp(command, "4") == 0)
+    else if(strcmp(command, "deletemyinfo") == 0 || strcmp(command, "4") == 0)
     {
         delete_all(stats);
         cold_start(movieArray, stats);
     }
-    else if (strcmp(command, "GetMovie") == 0 || strcmp(command, "getmovie") == 0 || strcmp(command, "5") == 0)
+    else if (strcmp(command, "getmovie") == 0 || strcmp(command, "5") == 0)
     {
         int i;
         scanf(" %i", &i);
         getMovie(movieArray, i);
     }
-    else if (strcmp(command, "RecommendMovie") == 0 || strcmp(command, "recommendmovie") == 0 || strcmp(command, "6") == 0)
+    else if (strcmp(command, "recommendmovie") == 0 || strcmp(command, "6") == 0)
     {
         RecommendMovie(movieArray,stats);
     }
-    else if (strcmp(command, "PrintMovieHistory") == 0 || strcmp(command, "printmoviehistory") == 0 || strcmp(command, "7") == 0)
+    else if (strcmp(command, "printmoviehistory") == 0 || strcmp(command, "7") == 0)
     {
         printMovieHistory(stats);
     }
-    else if (strcmp(command, "PrintOtherStats") == 0 || strcmp(command, "printotherstats") == 0 || strcmp(command, "8") == 0)
+    else if (strcmp(command, "printotherstats") == 0 || strcmp(command, "8") == 0)
     {
         printOtherStats(stats);
     }
@@ -251,7 +253,7 @@ void fraFilTilMovie(Movies* movieArray)
 
     fscanf(f," %[^\n]\n",buffer);
     //printf("%s \n", buffer);
-    for (int i = 0; i < MAENGDE; i++) //her g�r programmet igennem hele arrayet og k�rer scanFunktion indtil den har n�et alle filmene
+    for (int i = 0; i < MAENGDE; i++) //her gaar programmet igennem hele arrayet og koerer scanFunktion indtil den har naaet alle filmene
     {
         movieArray[i] = scanFunktion(f);
         movieArray[i].id = i +1;
@@ -511,7 +513,7 @@ void delete_all(userStats* statistics)
     char answer[4];
 
     do {
-        printf("Do you want to delete your data so far (yes or no)?\n");
+        printf("Do you want to delete all of your data? (yes or no)?\n");
         scanf(" %s", answer);
 
         if (strcmp(answer, "yes") == 0) {
@@ -528,9 +530,9 @@ void delete_all(userStats* statistics)
     } while (strcmp(answer, "yes") != 0 && strcmp(answer, "no") != 0);
 }
 
-void savefiles(userStats* statForFilm) //tager imod en  userStatsstruct
+void savefiles(userStats* statForFilm) //tager imod en userStatsstruct
 {
-    FILE* f2 = fopen("persondata.txt", "w"); //laver en ny fil og printer  userStatsstructsene i filen.
+    FILE* f2 = fopen("persondata.txt", "w"); //laver en ny fil og printer userStatsstructsene i filen.
     for (int i = 0; i < MAENGDE; i++) //print for film
     {
         if (statForFilm[0].statsMovies[i].movieId != 0) 
@@ -735,7 +737,6 @@ void RecommendMovie(Movies* movieArray, userStats* stats)
         printMovieName(movieArray[y]);
     }
 
-
     //gives us 2 movies between 1001-6000
     printf("\nMovies you don't normally watch\n");
     for (int i = 0; i < 2; i++)
@@ -759,18 +760,18 @@ void movieRatedAlgorithm(movieStats movieArray[], Movies theMovie, int movieRati
     double weight;
     while (movieArray[pladsPaaArray].movieId != 0)//m�ske �ndrer NULL
     {
-        pladsPaaArray++; //denne whilel�kke finder den n�ste tomme plads p� array'et
+        pladsPaaArray++; //denne whileloekke finder den naaste tomme plads paa array'et
     }
     for (int r = pladsPaaArray; r >= 0; r--)
     {
         compare = strcmp(theMovie.nameOfFilm, movieArray[r].movieName);
-        if (compare == 0)//hvis den finder en plads paa array'et hvor den allerede eksistere skal den �ndrer point
+        if (compare == 0)//hvis den finder en plads paa array'et hvor den allerede eksistere skal den aendrer point
         {
             movieArray[pladsPaaArray].movieScore = movieRating;
             break;
         }
     }
-    if (compare != 0) //hvis ikke den kan finde noget om filmen i array, tilf�j disse v�rdier
+    if (compare != 0) //hvis ikke den kan finde noget om filmen i array, tilfoej disse vaerdier
     {
         strcpy(movieArray[pladsPaaArray].movieName, theMovie.nameOfFilm);
         movieArray[pladsPaaArray].movieId = pladsPaaArray + 1;
@@ -785,9 +786,9 @@ void genreRatedAlgorithm(genreStats genreArray[], Movies theMovie, int movieRati
     
     for (int i = 0; i < GENRE_MAX_AMOUNT; i++)
     {
-        while (genreArray[pladsPaaArray].genreId != 0)//m�ske �ndrer NULL
+        while (genreArray[pladsPaaArray].genreId != 0)//maaske aendrer NULL
         {
-            pladsPaaArray++; //denne whilel�kke finder den n�ste tomme plads p� array'et
+            pladsPaaArray++; //denne whileloekke finder den naeste tomme plads paa array'et
         }
 
         if (theMovie.genre[i][0] == '\n') {
@@ -796,22 +797,22 @@ void genreRatedAlgorithm(genreStats genreArray[], Movies theMovie, int movieRati
         for (int r = pladsPaaArray; r >= 0; r--)
         {
             compare = strcmp(theMovie.genre[i], genreArray[r].genreName);
-            if (compare == 0)//hvis den finder en plads paa array'et hvor den allerede eksistere skal den �ndrer point
+            if (compare == 0)//hvis den finder en plads paa array'et hvor den allerede eksistere skal den aendrer point
             {
                 if (movieRating > genreArray[r].genrePoint) //if statement er "har vi gemt en mindre score end det de har givet filmene?""
                 {
-                    weight = ((movieRating - genreArray[r].genrePoint) / 10) + 1; //tallende her er v�gtberegning valgt af mo
-                    genreArray[r].genrePoint *= weight; //efter weight beregning skal det ganges med scoren der var f�r
+                    weight = ((movieRating - genreArray[r].genrePoint) / 10) + 1; //tallende her er vaegtberegning valgt af mo
+                    genreArray[r].genrePoint *= weight; //efter weight beregning skal det ganges med scoren der var foer
                 }
                 else if (movieRating < genreArray[r].genrePoint) //er det vi har gemt mere end mindre end det de taster
                 {
-                    weight = ((genreArray[r].genrePoint - movieRating) / 10) + 1; //den er nedvurderet med /20 i stedet for /10 s�dan at numrene ikke bliver �ndret for meget
+                    weight = ((genreArray[r].genrePoint - movieRating) / 10) + 1; //den er nedvurderet med /20 i stedet for /10 saedan at numrene ikke bliver aendret for meget
                     genreArray[r].genrePoint /= weight;
                 }
                 break;
             }
         }
-        if (compare != 0) //hvis ikke den kan finde noget om genren i array, tilf�j disse v�rdier
+        if (compare != 0) //hvis ikke den kan finde noget om genren i array, tilfoej disse vaerdier
         {
             strcpy(genreArray[pladsPaaArray].genreName, theMovie.genre[i]);
             genreArray[pladsPaaArray].genreId = pladsPaaArray + 1;
@@ -827,20 +828,20 @@ void actorRatedAlgorithm(actorStats actorArray[], Movies theMovie, int movieRati
 {
     int pladsPaaArray = 0, compare = 0;
     double weight;
-    while (actorArray[pladsPaaArray].actorId != 0)//m�ske �ndrer NULL
+    while (actorArray[pladsPaaArray].actorId != 0)//maaske aendrer NULL
     {
-        pladsPaaArray++; //denne whilel�kke finder den n�ste tomme plads p� array'et
+        pladsPaaArray++; //denne whileloekke finder den naaste tomme plads paa array'et
     }
 
     for (int r = pladsPaaArray; r >= 0; r--)
     {
         compare = strcmp(theMovie.star_actor, actorArray[r].actorName);
-        if (compare == 0)//hvis den finder en plads paa array'et hvor den allerede eksistere skal den �ndrer point
+        if (compare == 0)//hvis den finder en plads paa array'et hvor den allerede eksistere skal den aandrer point
         {
             if (movieRating > actorArray[r].actorPoint) //if statement er "har vi gemt en mindre score end det de har givet filmene?""
             {
-                weight = ((movieRating - actorArray[r].actorPoint) / 10) + 1; //tallende her er v�gtberegning valgt af mo
-                actorArray[r].actorPoint *= weight; //efter weight beregning skal det ganges med scoren der var f�r
+                weight = ((movieRating - actorArray[r].actorPoint) / 10) + 1; //tallende her er vaegtberegning valgt af mo
+                actorArray[r].actorPoint *= weight; //efter weight beregning skal det ganges med scoren der var foer
             }
             else if (movieRating < actorArray[r].actorPoint) //er det vi har gemt mere end mindre end det de taster
             {
@@ -851,7 +852,7 @@ void actorRatedAlgorithm(actorStats actorArray[], Movies theMovie, int movieRati
         }
     }
 
-    if (compare != 0) //hvis ikke den kan finde noget om star_actorn i array, tilf�j disse v�rdier
+    if (compare != 0) //hvis ikke den kan finde noget om star_actorn i array, tilfoej disse vaerdier
     {
         strcpy(actorArray[pladsPaaArray].actorName, theMovie.star_actor);
         actorArray[pladsPaaArray].actorId = pladsPaaArray + 1;
@@ -863,20 +864,20 @@ void directorRatedAlgorithm(directorStats directorArray[], Movies theMovie, int 
 {
     int pladsPaaArray = 0, compare = 0;
     double weight;
-    while (directorArray[pladsPaaArray].directorId != 0)//m�ske �ndrer NULL
+    while (directorArray[pladsPaaArray].directorId != 0)//maaske aendrer NULL
     {
-        pladsPaaArray++; //denne whilel�kke finder den n�ste tomme plads p� array'et
+        pladsPaaArray++; //denne whileloekke finder den naaste tomme plads paa array'et
     }
 
     for (int r = pladsPaaArray; r >= 0; r--)
     {
         compare = strcmp(theMovie.director, directorArray[r].directorName);
-        if (compare == 0)//hvis den finder en plads paa array'et hvor den allerede eksistere skal den �ndrer point
+        if (compare == 0)//hvis den finder en plads paa array'et hvor den allerede eksistere skal den aendrer point
         {
             if (movieRating > directorArray[r].directorPoint) //if statement er "har vi gemt en mindre score end det de har givet filmene?""
             {
-                weight = ((movieRating - directorArray[r].directorPoint) / 10) + 1; //tallende her er v�gtberegning valgt af mo
-                directorArray[r].directorPoint *= weight; //efter weight beregning skal det ganges med scoren der var f�r
+                weight = ((movieRating - directorArray[r].directorPoint) / 10) + 1; //tallende her er vaegtberegning valgt af mo
+                directorArray[r].directorPoint *= weight; //efter weight beregning skal det ganges med scoren der var foer
             }
             else if (movieRating < directorArray[r].directorPoint) //er det vi har gemt mere end mindre end det de taster
             {
@@ -887,7 +888,7 @@ void directorRatedAlgorithm(directorStats directorArray[], Movies theMovie, int 
         }
     }
 
-    if (compare != 0) //hvis ikke den kan finde noget om star_actorn i array, tilf�j disse v�rdier
+    if (compare != 0) //hvis ikke den kan finde noget om star_actorn i array, tilfoej disse vaerdier
     {
         strcpy(directorArray[pladsPaaArray].directorName, theMovie.director);
         directorArray[pladsPaaArray].directorId = pladsPaaArray + 1;
@@ -906,7 +907,7 @@ void rateMovie(int movieID, userStats* stats, Movies* movieArray) {
     }
 
     do {
-        printf("Please rate the movie from 1-10: ");
+        printf("Please rate the movie on a score from 1-10: ");
         scanf(" %d", &userRating);
         if (userRating < 1 || userRating > 10) {
             printf("INVALID INPUT");
