@@ -156,7 +156,7 @@ void getMovie(Movies* movieArray, int id)
 {
     for (int i = 0; i < MAENGDE; i++)
     {
-        if (movieArray[i].id == id) 
+        if (movieArray[i].id == id)
         {
             printFunktion(movieArray[i]);
             break;
@@ -180,7 +180,11 @@ void printCommandLines(void)
 
 int runCommand(char* command, Movies* movieArray, userStats* stats)
 {
-    command[0] = tolower(command[0]);
+
+    for (int i = 0; command[i] != '\0'; i++)
+        command[i] = tolower(command[i]);
+
+    
     if (strcmp(command, "exit") == 0 || strcmp(command, "0") == 0)
     {
         return 0;
@@ -200,7 +204,7 @@ int runCommand(char* command, Movies* movieArray, userStats* stats)
     {
         recommendRandom(movieArray);
     }
-    else if(strcmp(command, "deletemyinfo") == 0 || strcmp(command, "4") == 0)
+    else if (strcmp(command, "deletemyinfo") == 0 || strcmp(command, "4") == 0)
     {
         delete_all(stats);
         cold_start(movieArray, stats);
@@ -213,7 +217,7 @@ int runCommand(char* command, Movies* movieArray, userStats* stats)
     }
     else if (strcmp(command, "recommendmovie") == 0 || strcmp(command, "6") == 0)
     {
-        RecommendMovie(movieArray,stats);
+        RecommendMovie(movieArray, stats);
     }
     else if (strcmp(command, "printmoviehistory") == 0 || strcmp(command, "7") == 0)
     {
@@ -251,12 +255,12 @@ void fraFilTilMovie(Movies* movieArray)
     }
     char buffer[5000];
 
-    fscanf(f," %[^\n]\n",buffer);
+    fscanf(f, " %[^\n]\n", buffer);
     //printf("%s \n", buffer);
     for (int i = 0; i < MAENGDE; i++) //her gaar programmet igennem hele arrayet og koerer scanFunktion indtil den har naaet alle filmene
     {
         movieArray[i] = scanFunktion(f);
-        movieArray[i].id = i +1;
+        movieArray[i].id = i + 1;
     }
     fclose(f);
 }
@@ -272,7 +276,7 @@ Movies scanFunktion(FILE* f) //denne funktion gemmer enkelte film
     ThisMovie.genre;
     do
     {
-        
+
         fscanf(f, " %[^,^)]%c", ThisMovie.genre[i], &ch);
         i++;
     } while (ch != ')');
@@ -364,13 +368,13 @@ void printMovieName(Movies ThisMovie)
 void cold_start(Movies* movieArray, userStats* stats) {
     //pointer file placeholder
     FILE* file;
-    
+
     if ((file = fopen("persondata.txt", "r")) != NULL) {
         fclose(file);
         read_stats(stats);
     }
     else {
-        ask_user(movieArray,stats);
+        ask_user(movieArray, stats);
     }
 }
 
@@ -402,17 +406,17 @@ void ask_user(Movies* movieArray, userStats* stats) {
                 scanf(" %c", &s);
                 s = toupper(s);
 
-                if (s == 'Y') 
+                if (s == 'Y')
                 {
                     int id;
                     printf("Which movie would you like to review (id): ");
                     scanf(" %i", &id);
                     rateMovie(id, stats, movieArray);
                 }
-                    
+
 
             } while (s != 'Y');
-            
+
 
 
         }
@@ -431,7 +435,7 @@ void ask_user(Movies* movieArray, userStats* stats) {
                         z++;
                 }
 
-                
+
                 qsort(genre, 3, sizeof(int), compareFunc);
 
                 if (!z)
@@ -453,7 +457,7 @@ void ask_user(Movies* movieArray, userStats* stats) {
             printf("INVALID INPUT\n");
         }
     } while (x != 'Y' && x != 'N');
-    
+
 }
 
 void read_stats(userStats* statistics) {
@@ -467,7 +471,7 @@ void read_stats(userStats* statistics) {
     char tek[1000] = "";
     char tek2[1000] = "";
     int i = 0;
-    
+
     while (fscanf(f, "%1000[^;^\n];%1000[^;^\n];%1000[^;^\n];", tek, tek2, statistics[0].statsMovies[i].movieName) == 3)
     {
         statistics[0].statsMovies[i].movieId = atoi(tek);
@@ -537,39 +541,39 @@ void savefiles(userStats* statForFilm) //tager imod en userStatsstruct
     FILE* f2 = fopen("persondata.txt", "w"); //laver en ny fil og printer userStatsstructsene i filen.
     for (int i = 0; i < MAENGDE; i++) //print for film
     {
-        if (statForFilm[0].statsMovies[i].movieId != 0) 
+        if (statForFilm[0].statsMovies[i].movieId != 0)
         {
             fprintf(f2, "%d;%.2lf;%s;", statForFilm[0].statsMovies[i].movieId, statForFilm[0].statsMovies[i].movieScore, statForFilm[0].statsMovies[i].movieName);
-            
+
         }
-        
+
     }
     fprintf(f2, "\n");
     for (int i = 0; i < GENRE_MAX_AMOUNT; i++) //print for genre
     {
-        if (statForFilm[0].statsGenre[i].genreId != 0) 
+        if (statForFilm[0].statsGenre[i].genreId != 0)
         {
             fprintf(f2, "%d;%.2lf;%s;", statForFilm[0].statsGenre[i].genreId, statForFilm[0].statsGenre[i].genrePoint, statForFilm[0].statsGenre[i].genreName);
-            
+
         }
-        
+
     }
     fprintf(f2, "\n");
     for (int i = 0; i < MAENGDE; i++) //print for skuespillere
     {
-        if(statForFilm[0].statsActor[i].actorId != 0)
+        if (statForFilm[0].statsActor[i].actorId != 0)
         {
             fprintf(f2, "%d;%.2lf;%s;", statForFilm[0].statsActor[i].actorId, statForFilm[0].statsActor[i].actorPoint, statForFilm[0].statsActor[i].actorName);
-            
+
         }
     }
     fprintf(f2, "\n");
     for (int i = 0; i < MAENGDE; i++) // print til director
     {
-        if(statForFilm[0].statsDirector[i].directorId != 0)
+        if (statForFilm[0].statsDirector[i].directorId != 0)
         {
             fprintf(f2, "%d;%.2lf;%s;", statForFilm[0].statsDirector[i].directorId, statForFilm[0].statsDirector[i].directorPoint, statForFilm[0].statsDirector[i].directorName);
-            
+
         }
     }
     fprintf(f2, "\n");
@@ -609,7 +613,7 @@ void concatenateStrings(char strings[][WORD_LENGTH], int size) {
     }
 }
 
-double ScoreGetGenres(Movies movieArray, userStats* stats) 
+double ScoreGetGenres(Movies movieArray, userStats* stats)
 {
     double x = 0, y = 0;
     for (int i = 0; i < GENRE_MAX_AMOUNT; i++)
@@ -622,7 +626,7 @@ double ScoreGetGenres(Movies movieArray, userStats* stats)
             if (stats[0].statsGenre[t].genreName[0] == '\0') {
                 continue; // Skip empty strings
             }
-            if (strcmp(movieArray.genre[i], stats[0].statsGenre[t].genreName) == 0) 
+            if (strcmp(movieArray.genre[i], stats[0].statsGenre[t].genreName) == 0)
             {
                 x += stats[0].statsGenre[t].genrePoint;
                 y++;
@@ -684,9 +688,9 @@ int haveseen(Movies movieArray, userStats* stats)
         if (stats[0].statsMovies[i].movieName[0] == '\n') {
             continue; // Skip empty strings
         }
-        if (strcmp(movieArray.nameOfFilm, stats[0].statsDirector[i].directorName) == 0)
+        if (strcmp(movieArray.nameOfFilm, stats[0].statsMovies[i].movieName) == 0)
         {
-            x ++;
+            x++;
             break;
         }
     }
@@ -703,7 +707,7 @@ void RecommendMovie(Movies* movieArray, userStats* stats)
             movieArray[i].userScore = 0;
             continue;
         }
-         
+
         double genreScore = ScoreGetGenres(movieArray[i], stats);
         double actorScore = ScoreGetActor(movieArray[i], stats);
         double directorScore = ScoreGetDirector(movieArray[i], stats);
@@ -785,7 +789,7 @@ void genreRatedAlgorithm(genreStats genreArray[], Movies theMovie, int movieRati
 {
     int pladsPaaArray = 0, compare = 0;
     double weight;
-    
+
     for (int i = 0; i < GENRE_MAX_AMOUNT; i++)
     {
         while (genreArray[pladsPaaArray].genreId != 0)//maaske aendrer NULL
@@ -805,13 +809,15 @@ void genreRatedAlgorithm(genreStats genreArray[], Movies theMovie, int movieRati
                 {
                     weight = ((movieRating - genreArray[r].genrePoint) / 10) + 1; //tallende her er vaegtberegning valgt af mo
                     genreArray[r].genrePoint *= weight; //efter weight beregning skal det ganges med scoren der var foer
-                    genreArray[r].genrePoint = (genreArray[r].genrePoint > 10)?10:genreArray[r].genrePoint;
+                    genreArray[r].genrePoint = (genreArray[r].genrePoint > 10) ? 10 : genreArray[r].genrePoint;
+                    genreArray[r].genrePoint = (genreArray[r].genrePoint < 1) ? 1 : genreArray[r].genrePoint;
                 }
                 else if (movieRating < genreArray[r].genrePoint) //er det vi har gemt mere end mindre end det de taster
                 {
                     weight = ((genreArray[r].genrePoint - movieRating) / 10) + 1; //den er nedvurderet med /20 i stedet for /10 saedan at numrene ikke bliver aendret for meget
                     genreArray[r].genrePoint /= weight;
-                    genreArray[r].genrePoint = (genreArray[r].genrePoint < 1)?1:genreArray[r].genrePoint;
+                    genreArray[r].genrePoint = (genreArray[r].genrePoint < 1) ? 1 : genreArray[r].genrePoint;
+                    genreArray[r].genrePoint = (genreArray[r].genrePoint > 10) ? 10 : genreArray[r].genrePoint;
                 }
                 break;
             }
@@ -823,9 +829,9 @@ void genreRatedAlgorithm(genreStats genreArray[], Movies theMovie, int movieRati
             genreArray[pladsPaaArray].genrePoint = movieRating;
         }
     }
-    
 
-    
+
+
 }
 
 void actorRatedAlgorithm(actorStats actorArray[], Movies theMovie, int movieRating)
@@ -846,13 +852,15 @@ void actorRatedAlgorithm(actorStats actorArray[], Movies theMovie, int movieRati
             {
                 weight = ((movieRating - actorArray[r].actorPoint) / 10) + 1; //tallende her er vaegtberegning valgt af mo
                 actorArray[r].actorPoint *= weight; //efter weight beregning skal det ganges med scoren der var foer
-                actorArray[r].actorPoint = (actorArray[r].actorPoint > 10)? 10: actorArray[r].actorPoint;
+                actorArray[r].actorPoint = (actorArray[r].actorPoint > 10) ? 10 : actorArray[r].actorPoint;
+                actorArray[r].actorPoint = (actorArray[r].actorPoint < 1) ? 1 : actorArray[r].actorPoint;
             }
             else if (movieRating < actorArray[r].actorPoint) //er det vi har gemt mere end mindre end det de taster
             {
                 weight = ((actorArray[r].actorPoint - movieRating) / 10) + 1; //det samme bare nedvurdered fordi movierating er mindre end actorScore
                 actorArray[r].actorPoint /= weight;
-                actorArray[r].actorPoint = (actorArray[r].actorPoint < 1)? 1: actorArray[r].actorPoint;
+                actorArray[r].actorPoint = (actorArray[r].actorPoint < 1) ? 1 : actorArray[r].actorPoint;
+                actorArray[r].actorPoint = (actorArray[r].actorPoint > 10) ? 10 : actorArray[r].actorPoint;
             }
             break;
         }
@@ -884,13 +892,15 @@ void directorRatedAlgorithm(directorStats directorArray[], Movies theMovie, int 
             {
                 weight = ((movieRating - directorArray[r].directorPoint) / 10) + 1; //tallende her er vaegtberegning valgt af mo
                 directorArray[r].directorPoint *= weight; //efter weight beregning skal det ganges med scoren der var foer
-                directorArray[r].directorPoint = (directorArray[r].directorPoint > 10)? 10:directorArray[r].directorPoint;
+                directorArray[r].directorPoint = (directorArray[r].directorPoint > 10) ? 10 : directorArray[r].directorPoint;
+                directorArray[r].directorPoint = (directorArray[r].directorPoint < 1) ? 1 : directorArray[r].directorPoint;
             }
             else if (movieRating < directorArray[r].directorPoint) //er det vi har gemt mere end mindre end det de taster
             {
                 weight = ((directorArray[r].directorPoint - movieRating) / 10) + 1; //det samme bare nedvurdered fordi movierating er mindre end directorScore
                 directorArray[r].directorPoint /= weight;
-                directorArray[r].directorPoint = (directorArray[r].directorPoint < 1)? 1:directorArray[r].directorPoint;
+                directorArray[r].directorPoint = (directorArray[r].directorPoint < 1) ? 1 : directorArray[r].directorPoint;
+                directorArray[r].directorPoint = (directorArray[r].directorPoint > 10) ? 10 : directorArray[r].directorPoint;
             }
             break;
         }
@@ -922,7 +932,7 @@ void rateMovie(int movieID, userStats* stats, Movies* movieArray) {
         }
 
     } while (userRating < 1 || userRating > 10);
-    
+
     movieRatedAlgorithm(stats[0].statsMovies, movieArray[i], userRating);
     genreRatedAlgorithm(stats[0].statsGenre, movieArray[i], userRating);
     actorRatedAlgorithm(stats[0].statsActor, movieArray[i], userRating);
@@ -930,7 +940,7 @@ void rateMovie(int movieID, userStats* stats, Movies* movieArray) {
     savefiles(stats);
 }
 
-int printMovieHistory(userStats *stats) {
+int printMovieHistory(userStats* stats) {
     //Tjekker hvor mange film der er i historikken 
     for (int i = 0; i < MAENGDE; i++) {
         // print struct variables
