@@ -389,6 +389,7 @@ void ask_user(Movies* movieArray, userStats* stats) {
     do {
         printf("Start with random recommendations? (Y/N): ");
         scanf(" %c", &x);
+        x = toupper(x);
 
         if (x == 'Y') {
 
@@ -399,6 +400,7 @@ void ask_user(Movies* movieArray, userStats* stats) {
                 printf("\n Do you want to review any of these movies? (Y/N): ");
 
                 scanf(" %c", &s);
+                s = toupper(s);
 
                 if (s == 'Y') 
                 {
