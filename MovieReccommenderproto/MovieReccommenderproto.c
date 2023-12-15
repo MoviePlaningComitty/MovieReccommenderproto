@@ -803,11 +803,13 @@ void genreRatedAlgorithm(genreStats genreArray[], Movies theMovie, int movieRati
                 {
                     weight = ((movieRating - genreArray[r].genrePoint) / 10) + 1; //tallende her er vaegtberegning valgt af mo
                     genreArray[r].genrePoint *= weight; //efter weight beregning skal det ganges med scoren der var foer
+                    genreArray[r].genrePoint = (genreArray[r].genrePoint > 10)?10:genreArray[r].genrePoint;
                 }
                 else if (movieRating < genreArray[r].genrePoint) //er det vi har gemt mere end mindre end det de taster
                 {
                     weight = ((genreArray[r].genrePoint - movieRating) / 10) + 1; //den er nedvurderet med /20 i stedet for /10 saedan at numrene ikke bliver aendret for meget
                     genreArray[r].genrePoint /= weight;
+                    genreArray[r].genrePoint = (genreArray[r].genrePoint < 1)?1:genreArray[r].genrePoint;
                 }
                 break;
             }
@@ -842,11 +844,13 @@ void actorRatedAlgorithm(actorStats actorArray[], Movies theMovie, int movieRati
             {
                 weight = ((movieRating - actorArray[r].actorPoint) / 10) + 1; //tallende her er vaegtberegning valgt af mo
                 actorArray[r].actorPoint *= weight; //efter weight beregning skal det ganges med scoren der var foer
+                actorArray[r].actorPoint = (actorArray[r].actorPoint > 10)? 10: actorArray[r].actorPoint;
             }
             else if (movieRating < actorArray[r].actorPoint) //er det vi har gemt mere end mindre end det de taster
             {
                 weight = ((actorArray[r].actorPoint - movieRating) / 10) + 1; //det samme bare nedvurdered fordi movierating er mindre end actorScore
                 actorArray[r].actorPoint /= weight;
+                actorArray[r].actorPoint = (actorArray[r].actorPoint < 1)? 1: actorArray[r].actorPoint;
             }
             break;
         }
@@ -878,11 +882,13 @@ void directorRatedAlgorithm(directorStats directorArray[], Movies theMovie, int 
             {
                 weight = ((movieRating - directorArray[r].directorPoint) / 10) + 1; //tallende her er vaegtberegning valgt af mo
                 directorArray[r].directorPoint *= weight; //efter weight beregning skal det ganges med scoren der var foer
+                directorArray[r].directorPoint = (directorArray[r].directorPoint > 10)? 10:directorArray[r].directorPoint;
             }
             else if (movieRating < directorArray[r].directorPoint) //er det vi har gemt mere end mindre end det de taster
             {
                 weight = ((directorArray[r].directorPoint - movieRating) / 10) + 1; //det samme bare nedvurdered fordi movierating er mindre end directorScore
                 directorArray[r].directorPoint /= weight;
+                directorArray[r].directorPoint = (directorArray[r].directorPoint < 1)? 1:directorArray[r].directorPoint;
             }
             break;
         }
