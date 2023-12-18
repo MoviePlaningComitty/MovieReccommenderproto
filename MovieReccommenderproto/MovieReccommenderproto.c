@@ -726,7 +726,7 @@ void RecommendMovie(Movies* movieArray, userStats* stats)
     }
 
     // gives us 3 movies between 201-1000
-    printf("\nMovies you are likely to watch\n");
+    printf("\nHighly Recommended Movies\n");
     for (int i = 0; i < 3; i++)
     {
         int y = rand() % 800 + 201;
@@ -735,7 +735,7 @@ void RecommendMovie(Movies* movieArray, userStats* stats)
     }
 
     //gives us 2 movies between 1001-2000
-    printf("\nMovies you might not watch normally\n");
+    printf("\nMovies of Potential Interest\n");
     for (int i = 0; i < 2; i++)
     {
         int y = rand() % 1000 + 1001;
@@ -744,7 +744,7 @@ void RecommendMovie(Movies* movieArray, userStats* stats)
     }
 
     //gives us 2 movies between 1001-6000
-    printf("\nMovies you don't normally watch\n");
+    printf("\nLess Commonly Explored Movies\n");
     for (int i = 0; i < 2; i++)
     {
         int y = rand() % 5000 + 1001;
